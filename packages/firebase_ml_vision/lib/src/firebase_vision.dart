@@ -70,7 +70,7 @@ class FirebaseVisionImage {
         _type = type;
 
   /// Construct a [FirebaseVisionImage] from a file.
-  factory FirebaseVisionImage.fromFile(File imageFile) {
+  factory FirebaseVisionImage.fromFile(File? imageFile) {
     assert(imageFile != null);
     return FirebaseVisionImage._(
       type: _ImageType.file,
@@ -79,11 +79,11 @@ class FirebaseVisionImage {
   }
 
   /// Construct a [FirebaseVisionImage] from a file path.
-  factory FirebaseVisionImage.fromFilePath(String imagePath) {
+  factory FirebaseVisionImage.fromFilePath(String? imagePath) {
     assert(imagePath != null);
     return FirebaseVisionImage._(
       type: _ImageType.file,
-      imageFile: File(imagePath),
+      imageFile: File(imagePath!),
     );
   }
 
@@ -137,13 +137,13 @@ class FirebaseVisionImagePlaneMetadata {
         );
 
   /// The row stride for this color plane, in bytes.
-  final int bytesPerRow;
+  final int? bytesPerRow;
 
   /// Height of the pixel buffer on iOS.
-  final int height;
+  final int? height;
 
   /// Width of the pixel buffer on iOS.
-  final int width;
+  final int? width;
 
   Map<String, dynamic> _serialize() => <String, dynamic>{
         'bytesPerRow': bytesPerRow,
@@ -169,10 +169,10 @@ class FirebaseVisionImageMetadata {
           defaultTargetPlatform != TargetPlatform.iOS || rawFormat != null,
         ),
         assert(
-          defaultTargetPlatform != TargetPlatform.iOS,
+          defaultTargetPlatform != TargetPlatform.iOS || planeData != null,
         ),
         assert(
-          defaultTargetPlatform != TargetPlatform.iOS || planeData.isNotEmpty,
+          defaultTargetPlatform != TargetPlatform.iOS || planeData!.isNotEmpty,
         );
 
   /// Size of the image in pixels.
@@ -197,7 +197,7 @@ class FirebaseVisionImageMetadata {
   /// The plane attributes to create the image buffer on iOS.
   ///
   /// Not used on Android.
-  final List<FirebaseVisionImagePlaneMetadata> planeData;
+  final List<FirebaseVisionImagePlaneMetadata>? planeData;
 
   int _imageRotationToInt(ImageRotation rotation) {
     switch (rotation) {
@@ -218,7 +218,7 @@ class FirebaseVisionImageMetadata {
         'height': size.height,
         'rotation': _imageRotationToInt(rotation),
         'rawFormat': rawFormat,
-        'planeData': planeData.map((FirebaseVisionImagePlaneMetadata plane) => plane._serialize()).toList(),
+        'planeData': planeData?.map((FirebaseVisionImagePlaneMetadata plane) => plane._serialize()).toList(),
       };
 }
 

@@ -59,7 +59,7 @@ class FaceDetector {
   FaceDetector._(this.options, this._handle) : assert(options != null);
 
   /// The options for the face detector.
-  final FaceDetectorOptions options;
+  final FaceDetectorOptions? options;
   final int _handle;
   bool _hasBeenOpened = false;
   bool _isClosed = false;
@@ -73,13 +73,13 @@ class FaceDetector {
           'FaceDetector#processImage',
           <String, dynamic>{
             'handle': _handle,
-            'options': <String, dynamic>{
-              'enableClassification': options.enableClassification,
-              'enableLandmarks': options.enableLandmarks,
-              'enableContours': options.enableContours,
-              'enableTracking': options.enableTracking,
-              'minFaceSize': options.minFaceSize,
-              'mode': _enumToString(options.mode),
+            'options': <String, dynamic?>{
+              'enableClassification': options?.enableClassification,
+              'enableLandmarks': options?.enableLandmarks,
+              'enableContours': options?.enableContours,
+              'enableTracking': options?.enableTracking,
+              'minFaceSize': options?.minFaceSize,
+              'mode': _enumToString(options?.mode),
             },
           }..addAll(visionImage._serialize()),
         ) ??
@@ -169,7 +169,7 @@ class Face {
         trackingId = data['trackingId'],
         _landmarks = Map<FaceLandmarkType?, FaceLandmark?>.fromIterables(FaceLandmarkType.values,
             FaceLandmarkType.values.map((FaceLandmarkType type) {
-          final List<dynamic> pos = data['landmarks'][_enumToString(type)];
+          final List<dynamic>? pos = data['landmarks'][_enumToString(type)];
           return (pos == null)
               ? null
               : FaceLandmark._(
@@ -180,7 +180,7 @@ class Face {
         _contours =
             Map<FaceContourType?, FaceContour?>.fromIterables(FaceContourType.values, FaceContourType.values.map((FaceContourType type) {
           /// added empty map to pass the tests
-          final List<dynamic> arr = (data['contours'] ?? <String, dynamic>{})[_enumToString(type)];
+          final List<dynamic>? arr = (data['contours'] ?? <String, dynamic>{})[_enumToString(type)];
           return (arr == null)
               ? null
               : FaceContour._(
@@ -195,7 +195,7 @@ class Face {
   /// The axis-aligned bounding rectangle of the detected face.
   ///
   /// The point (0, 0) is defined as the upper-left corner of the image.
-  final Rect boundingBox;
+  final Rect? boundingBox;
 
   /// The rotation of the face about the vertical axis of the image.
   ///
@@ -207,7 +207,7 @@ class Face {
   /// The Euler Y angle is guaranteed only when using the "accurate" mode
   /// setting of the face detector (as opposed to the "fast" mode setting, which
   /// takes some shortcuts to make detection faster).
-  final double headEulerAngleY;
+  final double? headEulerAngleY;
 
   /// The rotation of the face about the axis pointing out of the image.
   ///
@@ -217,30 +217,30 @@ class Face {
   /// to the camera.
   ///
   /// ML Kit always reports the Euler Z angle of a detected face.
-  final double headEulerAngleZ;
+  final double? headEulerAngleZ;
 
   /// Probability that the face's left eye is open.
   ///
   /// A value between 0.0 and 1.0 inclusive, or null if probability was not
   /// computed.
-  final double leftEyeOpenProbability;
+  final double? leftEyeOpenProbability;
 
   /// Probability that the face's right eye is open.
   ///
   /// A value between 0.0 and 1.0 inclusive, or null if probability was not
   /// computed.
-  final double rightEyeOpenProbability;
+  final double? rightEyeOpenProbability;
 
   /// Probability that the face is smiling.
   ///
   /// A value between 0.0 and 1.0 inclusive, or null if probability was not
   /// computed.
-  final double smilingProbability;
+  final double? smilingProbability;
 
   /// The tracking ID if the tracking is enabled.
   ///
   /// Null if tracking was not enabled.
-  final int trackingId;
+  final int? trackingId;
 
   /// Gets the landmark based on the provided [FaceLandmarkType].
   ///
